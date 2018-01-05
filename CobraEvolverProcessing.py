@@ -5,7 +5,7 @@ from cobrafba import CobraFBAEvolver
 from collections import Counter
 import numpy as np
 
-def plot_population
+
 
 filename = '240gen.csv'
 

@@ -10,7 +10,7 @@ from deap import tools
 from deap import algorithms
 from deap.benchmarks.tools import diversity, convergence, hypervolume
 from jamieexcel_to_json import cobrajsonfromexcel
-from fba_gene_min import evaluate_essential_reactions
+
 import matplotlib.pyplot as plt
 import csv
 
@@ -67,13 +67,8 @@ class CobraFBA():
         # import iaf1260
         self.model = cobra.io.load_json_model(input)
         self.model.objective = "Biomass"
-        self.non_essential_reactions, self.essential_reactions = evaluate_essential_reactions(self.model)
+        self.non_essential_reactions, self.essential_reactions = self.evaluate_essential_reactions(self.model)
         self.reaction_names, self.initial_reaction_bounds = self.find_reaction_intial_bounds(self.non_essential_reactions)
-        print(len(self.non_essential_reactions))
-        # aerobic growth under  18.5 glucose
-        #self.model.reactions.get_by_id("EX_glc__D_e").lower_bound = -18.5
-        #self.model.reactions.get_by_id("EX_o2_e").lower_bound = -20
-
 
     def find_reaction_intial_bounds(self, reactions):
         reaction_names = list()
@@ -88,8 +83,7 @@ class CobraFBA():
 
 
         return reaction_names, dict(zip(reaction_names, reaction_bounds))
-        #with open("solution.json", 'w') as f:
-            #.write(solution.fluxes.to_json())
+
     def set_reaction_bounds(self, individual):
         for reaction_active, reaction in zip(individual, self.reaction_names):
             if reaction_active:
@@ -101,6 +95,37 @@ class CobraFBA():
                 self.model.reactions.get_by_id(reaction).upper_bound = 0
     def run_fba(self):
         return self.model.slim_optimize()
+
+    def evaluate_essential_reactions(self,model):
+        reactions_list = list()
+        reaction_bounds = list()
+
+        for reaction in model.reactions:
+            if 'EX' in reaction.id[:2]:
+                pass
+            else:
+                reactions_list.append(reaction)
+                reaction_bounds.append([reaction.lower_bound, reaction.upper_bound])
+
+        non_essential_reactions = list()
+        essential_reactions = list()
+
+        for reaction, reaction_bound in zip(reactions_list, reaction_bounds):
+            model.reactions.get_by_id(reaction.id).lower_bound = 0
+            model.reactions.get_by_id(reaction.id).upper_bound = 0
+            growth = model.slim_optimize()
+            if growth > 0.001:
+                non_essential_reactions.append(reaction)
+            else:
+                essential_reactions.append(reaction)
+
+            model.reactions.get_by_id(reaction.id).lower_bound = reaction_bound[0]
+            model.reactions.get_by_id(reaction.id).upper_bound = reaction_bound[1]
+
+        print('Number of essential genes: ' + str(len(essential_reactions)))
+        print('Number of non essential genes: ' + str(len(non_essential_reactions)))
+
+        return non_essential_reactions, essential_reactions
 
 class CobraFBAEvolver():
     def __init__(self, input):
@@ -119,7 +144,7 @@ class CobraFBAEvolver():
             reactions = len(self.fba.non_essential_reactions)
         return growth,reactions
 
-    def run_nsga2evo(self, seed =None):
+    def run_nsga2evo(self, num_run, gen_record, seed =None):
         random.seed(seed)
 
         NGEN = 500
@@ -176,10 +201,13 @@ class CobraFBAEvolver():
             record = stats.compile(pop)
             logbook.record(gen=gen, evals=len(invalid_ind), **record)
             print(logbook.stream)
-            with open('currentpop.csv', 'w') as csvfile:
-                writer = csv.writer(csvfile, delimiter=',')
-                for p in pop:
-                    writer.writerow(p)
+
+            if gen in gen_record:
+                filename = str(num_run) + '_' + str(gen)+'.csv'
+                with open(filename, 'w') as csvfile:
+                    writer = csv.writer(csvfile, delimiter=',')
+                    for p in pop:
+                        writer.writerow(p)
 
 
         print("Final population hypervolume is %f" % hypervolume(pop, [11.0, 11.0]))
@@ -254,19 +282,14 @@ class CobraFBAEvolver():
         self.toolbox.register("HallOfFame", tools.HallOfFame)
 
 if __name__ == "__main__":
-    directory = 'E:\\Git\\FBA_Evolution'
-    #json_file = os.path.join(directory, 'iPRAE34_edit.json')
-    #if not os.path.isfile(json_file):
-    #    json_file = cobrajsonfromexcel(os.path.join(directory,'iPRAE34_edit.xlsx'),directory)
-    evolver = CobraFBAEvolver(os.path.join(directory, 'iRH826.json'))
-    pop, log = evolver.run_nsga2evo()
 
-    fig, ax = plt.subplots()
-    print(len(pop))
-    for p in pop:
-        growth,reactions = evolver.fitness_function(p)
-        ax.plot(reactions,growth,'o')
+    directory = os.getcwd()
 
-    ax.set_xlabel('Reactions')
-    ax.set_ylabel('Growth')
-    plt.show()
+    num_runs = range(1,5)
+    gen_record = range(50,500,50)
+
+    for num_run in num_runs:
+        evolver = CobraFBAEvolver(os.path.join(directory, 'iRH826.json'))
+        pop, log = evolver.run_nsga2evo(num_run, gen_record)
+
+
