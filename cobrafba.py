@@ -127,14 +127,9 @@ class CobraFBA():
 
         return non_essential_reactions, essential_reactions
 
-class CobraFBAEvolver():
-    def __init__(self, input):
-        self.fba = CobraFBA(input)
-        self.create_evo(len(self.fba.non_essential_reactions))
-        ones_individual = np.ones(len(self.fba.initial_reaction_bounds))
-
-
-
+class CobraFBABase():
+    def __init__(self):
+        self.fba = None
     def fitness_function(self,individual):
         self.fba.set_reaction_bounds(individual)
         growth = self.fba.run_fba()
@@ -143,6 +138,19 @@ class CobraFBAEvolver():
         else:
             reactions = len(self.fba.non_essential_reactions)
         return growth,reactions
+
+class CobraFBAProcessor(CobraFBABase):
+    def __init__(self, input):
+        super().__init__()
+        self.fba = CobraFBA(input)
+
+
+class CobraFBAEvolver(CobraFBABase):
+    def __init__(self, input):
+        super().__init__()
+        self.fba = CobraFBA(input)
+        self.create_evo(len(self.fba.non_essential_reactions))
+        ones_individual = np.ones(len(self.fba.initial_reaction_bounds))
 
     def run_nsga2evo(self, num_run, gen_record, seed =None):
         random.seed(seed)
