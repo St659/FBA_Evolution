@@ -1,15 +1,15 @@
 import csv
 import matplotlib.pyplot as plt
-import os
 from cobrafba import CobraFBAEvolver
 from collections import Counter
 import numpy as np
+import os
 
 
 
-filename = '240gen.csv'
+filename = '1_450.csv'
 
-directory = 'E:\\Git\\FBA_Evolution'
+directory = os.getcwd()
 evolver = CobraFBAEvolver(os.path.join(directory, 'iRH826.json'))
 fig, ax = plt.subplots()
 fig2, ax2 = plt.subplots()
@@ -33,7 +33,7 @@ counted_reactions = Counter(removed_reactions)
 for k,v in counted_reactions.items():
     print(str(k) + " " + str(v))
 
-common_reactions = dict((k,v) for k,v in counted_reactions.items() if v>=90)
+common_reactions = dict((k,v) for k,v in counted_reactions.items() if v>=50)
 print("Total Reactions Removed: " + str(len(counted_reactions)))
 
 print("PPC Removed: " + str(counted_reactions["PPC"]))
@@ -45,7 +45,7 @@ ax2.set_xticklabels(common_reactions.keys(), rotation='vertical')
 
 
 #ax.set_ylim([0.7,1])
-ax.set_xlim([500,850])
+#ax.set_xlim([500,850])
 ax.set_xlabel('Reactions')
 ax.set_ylabel('Growth')
 plt.show()

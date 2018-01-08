@@ -155,7 +155,7 @@ class CobraFBAEvolver(CobraFBABase):
     def run_nsga2evo(self, num_run, gen_record, seed =None):
         random.seed(seed)
 
-        NGEN = 500
+        NGEN = 1001
         MU = 100
 
 
@@ -289,12 +289,15 @@ class CobraFBAEvolver(CobraFBABase):
         self.toolbox.register("select", tools.selNSGA2)
         self.toolbox.register("HallOfFame", tools.HallOfFame)
 
+
 if __name__ == "__main__":
 
     directory = os.getcwd()
 
-    num_runs = range(1,5)
-    gen_record = range(50,500,50)
+    num_runs = range(1, 6)
+    gen_record = range(50, 1050, 50)
+
+    print('Beginning FBA Evolution for ' + str(num_runs[-1]) + ' runs of ' + str(gen_record[-1]) + ' generations')
 
     for num_run in num_runs:
         evolver = CobraFBAEvolver(os.path.join(directory, 'iRH826.json'))
