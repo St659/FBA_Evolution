@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cb026bcb-081e-4b24-a5f4-3057ce63fd1b" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/FBA_Evolution.iml" afterPath="$PROJECT_DIR$/.idea/FBA_Evolution.iml" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/CobraEvolverProcessing.py" afterPath="$PROJECT_DIR$/CobraEvolverProcessing.py" />
       <change beforePath="$PROJECT_DIR$/cobrafba.py" afterPath="$PROJECT_DIR$/cobrafba.py" />
-      <change beforePath="$PROJECT_DIR$/currentpop.csv" afterPath="" />
     </list>
     <ignored path="FBA_Evolution.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -71,9 +66,11 @@
       <file leaf-file-name="cobrafba.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cobrafba.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="291" column="0" lean-forward="true" selection-start-line="291" selection-start-column="0" selection-end-line="291" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="303">
+              <caret line="147" column="0" lean-forward="true" selection-start-line="147" selection-start-column="0" selection-end-line="147" selection-end-column="0" />
+              <folding>
+                <element signature="e#9037#10099#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -620,7 +617,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
           <caret line="3" column="3" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="26" />
-          <folding />
+          <folding>
+            <element signature="e#9037#10099#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -685,7 +684,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
           <caret line="3" column="3" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="26" />
-          <folding />
+          <folding>
+            <element signature="e#9037#10099#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -750,7 +751,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
           <caret line="3" column="3" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="26" />
-          <folding />
+          <folding>
+            <element signature="e#9037#10099#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -819,7 +822,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
           <caret line="2" column="448" lean-forward="false" selection-start-line="2" selection-start-column="448" selection-end-line="2" selection-end-column="448" />
-          <folding />
+          <folding>
+            <element signature="e#9037#10099#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -965,9 +970,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cobrafba.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="291" column="0" lean-forward="true" selection-start-line="291" selection-start-column="0" selection-end-line="291" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="303">
+          <caret line="147" column="0" lean-forward="true" selection-start-line="147" selection-start-column="0" selection-end-line="147" selection-end-column="0" />
+          <folding>
+            <element signature="e#9037#10099#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>

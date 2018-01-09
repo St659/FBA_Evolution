@@ -130,14 +130,21 @@ class CobraFBA():
 class CobraFBABase():
     def __init__(self):
         self.fba = None
+
     def fitness_function(self,individual):
+
+        with open('current_ind.csv', 'w') as csvfile:
+            writer = csv.writer(csvfile, delimiter=',')
+            writer.writerow(individual)
+
         self.fba.set_reaction_bounds(individual)
         growth = self.fba.run_fba()
         if growth > 0.001:
             reactions = sum(individual)
         else:
             reactions = len(self.fba.non_essential_reactions)
-        return growth,reactions
+        return growth, reactions
+
 
 class CobraFBAProcessor(CobraFBABase):
     def __init__(self, input):
@@ -191,21 +198,30 @@ class CobraFBAEvolver(CobraFBABase):
         # Begin the generational process
         for gen in range(1, NGEN):
             # Vary the population
+
+            print('Cloning Population')
             offspring = tools.selTournamentDCD(pop, len(pop))
             offspring = [self.toolbox.clone(ind) for ind in offspring]
+            print('Cloning Completed')
 
+            print('Mutating Offspring')
             for ind1 in offspring:
                 self.toolbox.mutate(ind1)
                 del ind1.fitness.values
+            print('Mutation Completed')
 
             # Evaluate the individuals with an invalid fitness
             invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
+            print('Evaluating Fitness')
             fitnesses = self.toolbox.map(self.toolbox.evaluate, invalid_ind)
             for ind, fit in zip(invalid_ind, fitnesses):
                 ind.fitness.values = fit
+            print("Fitness Evaluation Completed")
 
             # Select the next generation population
+            print('Selecting Population')
             pop = self.toolbox.select(pop + offspring, MU)
+            print('Selection Completed')
             record = stats.compile(pop)
             logbook.record(gen=gen, evals=len(invalid_ind), **record)
             print(logbook.stream)
@@ -213,12 +229,13 @@ class CobraFBAEvolver(CobraFBABase):
             if gen in gen_record:
                 filename = str(num_run) + '_' + str(gen)+'.csv'
                 with open(filename, 'w') as csvfile:
+                    print('Writing to ' + filename)
                     writer = csv.writer(csvfile, delimiter=',')
                     for p in pop:
                         writer.writerow(p)
 
-
-        print("Final population hypervolume is %f" % hypervolume(pop, [11.0, 11.0]))
+        print('Evolution Completed')
+        #print("Final population hypervolume is %f" % hypervolume(pop, [11.0, 11.0]))
 
         return pop, logbook
 
