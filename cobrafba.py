@@ -113,6 +113,8 @@ class CobraFBA():
         for reaction, reaction_bound in zip(reactions_list, reaction_bounds):
             model.reactions.get_by_id(reaction.id).lower_bound = 0
             model.reactions.get_by_id(reaction.id).upper_bound = 0
+            if 'PPC' in reaction.id:
+                print('Reaction id: ' + str(reaction.id) + ' Growth: ' + str(growth))
             growth = model.slim_optimize()
             if growth > 0.001:
                 non_essential_reactions.append(reaction)
